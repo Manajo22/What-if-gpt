@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>What-If GPT Mindmap</title>
+  <style>
+    html, body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #e0f2fe;
+      height: 100%;
+      overflow: hidden;
+    }
+    header {
+      text-align: center;
+      padding: 20px;
+      background: #0f172a;
+      color: white;
+      font-size: 2rem;
+      position: fixed;
+      width: 100%;
+      z-index: 1000;
+    }
+    #inputArea {
+      text-align: center;
+      margin-top: 80px;
+      position: fixed;
+      width: 100%;
+      z-index: 1000;
+    }
+    #inputArea input {
+      padding: 10px;
+      width: 300px;
+      border-radius: 10px;
+      border: 1px solid #94a3b8;
+    }
+    #inputArea button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      margin-left: 10px;
+      border: none;
+      background: #0ea5e9;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    #scrollWrapper {
+      position: absolute;
+      top: 140px;
+      left: 0;
+      width: 100vw;
+      height: calc(100vh - 140px);
+      overflow: scroll;
+    }
+    #canvasWrapper {
+      width: 4000px;
+      height: 4000px;
+      position: relative;
+    }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    .input-question {
+      position: absolute;
+      background: #f1f5f9;
+      padding: 8px;
+      border-radius: 10px;
+      border: 1px solid #94a3b8;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+    .input-question input {
+      width: 140px;
+      padding: 6px;
+    }
+    .input-question button {
+      margin-left: 5px;
+      padding: 6px;
+      background: #0ea5e9;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>What-If GPT 🌿 Mindmap Explorer</header>
+  <div id="inputArea">
+    <input type="text" id="mainQuestion" placeholder="Type a 'what if' question...">
+    <button id="generateBtn">Explore</button>
+  </div>
+  <div id="scrollWrapper">
+    <div id="canvasWrapper">
+      <canvas id="mindmap" width="4000" height="4000"></canvas>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('mindmap');
+    const ctx = canvas.getContext('2d');
+    const wrapper = document.getElementById('canvasWrapper');
+    const scrollWrapper = document.getElementById('scrollWrapper');
+
+    let nodeId = 0;
+    const nodes = [];
+
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+
+    function drawNode(x, y, text, color = '#334155') {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(x, y, 70, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = 'white';
+      ctx.font = '14px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      wrapText(ctx, text, x, y, 120, 18);
+
+      nodes.push({ x, y });
+    }
+
+    function drawLine(x1, y1, x2, y2) {
+      ctx.strokeStyle = '#64748b';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    }
+
+    function wrapText(context, text, x, y, maxWidth, lineHeight) {
+      const words = text.split(' ');
+      let line = '';
+      let yy = y - 20;
+      for (let i = 0; i < words.length; i++) {
+        const testLine = line + words[i] + ' ';
+        const metrics = context.measureText(testLine);
+        if (metrics.width > maxWidth && i > 0) {
+          context.fillText(line, x, yy);
+          line = words[i] + ' ';
+          yy += lineHeight;
+        } else {
+          line = testLine;
+        }
+      }
+      context.fillText(line, x, yy);
+    }
+
+    function addInputBox(x, y) {
+      const input = document.createElement('div');
+      input.className = 'input-question';
+      input.style.left = `${x}px`;
+      input.style.top = `${y}px`;
+
+      const id = 'input-' + nodeId++;
+      input.innerHTML = `
+        <input type="text" id="${id}" placeholder="What if...">
+        <button onclick="addBranches('${id}', ${x}, ${y})">Go</button>
+      `;
+      wrapper.appendChild(input);
+    }
+    function getRandomColor() {
+  const colors = ['#1e3a8a', '#047857', '#b91c1c', '#7c3aed', '#dc2626', '#f97316', '#0e7490', '#6d28d9'];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
+function addBranches(id, x, y) {
+  const question = document.getElementById(id).value;
+  if (!question) return;
+
+  const answers = [
+    "New society emerges",
+    "DNA reengineered",
+    "Isolation rises",
+    "Traditions vanish",
+    "Tech accelerates"
+  ];
+
+  const radius = 200;
+  const angleStep = (2 * Math.PI) / answers.length;
+  const branchColor = getRandomColor(); // 🎨 NEW LINE
+
+      answers.forEach((ans, i) => {
+        let angle = i * angleStep;
+        let nx = x + radius * Math.cos(angle);
+        let ny = y + radius * Math.sin(angle);
+
+        while (nodes.some(n => Math.hypot(nx - n.x, ny - n.y) < 160)) {
+          nx += 15;
+          ny += 15;
+        }
+
+        drawLine(x, y, nx, ny);
+        drawNode(nx, ny, ans, branchColor); // 🎨 APPLY COLOR
+        addInputBox(nx + 40 * Math.cos(angle), ny + 30 * Math.sin(angle));
+      });
+    }
+
+    function generateMindMap() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      document.querySelectorAll('.input-question').forEach(e => e.remove());
+      nodes.length = 0;
+
+      const q = document.getElementById('mainQuestion').value || "What if we lived on Mars?";
+      const cx = centerX;
+      const cy = centerY;
+
+      drawNode(cx, cy, q, '#1e40af');
+
+      const answers = [
+        "Society adapts",
+        "Biology shifts",
+        "Architecture changes",
+        "New jobs",
+        "Mental effects"
+      ];
+
+      const angleStep = (2 * Math.PI) / answers.length;
+      answers.forEach((ans, i) => {
+        const angle = i * angleStep;
+        const nx = cx + 300 * Math.cos(angle);
+        const ny = cy + 250 * Math.sin(angle);
+        drawLine(cx, cy, nx, ny);
+        drawNode(nx, ny, ans);
+        addInputBox(nx + 40 * Math.cos(angle), ny + 30 * Math.sin(angle));
+      });
+
+      // Automatically scroll to center
+      scrollWrapper.scrollTo({
+        top: cy - scrollWrapper.clientHeight / 2,
+        left: cx - scrollWrapper.clientWidth / 2,
+        behavior: 'smooth'
+      });
+    }
+
+    document.getElementById('generateBtn').addEventListener('click', generateMindMap);
+  </script>
+</body>
+</html>
