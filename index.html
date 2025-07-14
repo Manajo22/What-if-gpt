@@ -13,11 +13,12 @@
     html, body {
       margin: 0;
       padding: 0;
-      font-family: 'Comic Neue', 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f0f23;
       height: 100vh;
       overflow: hidden;
       touch-action: none;
+      color: #e2e8f0;
     }
 
     .header {
@@ -26,25 +27,21 @@
       left: 0;
       right: 0;
       z-index: 1000;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      background: #1a1a2e;
+      border-bottom: 1px solid #2a2a3e;
       padding: 16px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
     .logo {
-      font-size: 22px;
-      font-weight: 700;
-      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      font-size: 20px;
+      font-weight: 600;
+      color: #e2e8f0;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -55,51 +52,49 @@
       align-items: center;
       gap: 12px;
       flex: 1;
-      max-width: 400px;
-      min-width: 250px;
+      max-width: 450px;
+      min-width: 280px;
     }
 
     .main-input {
       flex: 1;
-      padding: 14px 18px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-radius: 25px;
-      background: rgba(255, 255, 255, 0.9);
-      color: #2d3748;
+      padding: 12px 16px;
+      border: 2px solid #2a2a3e;
+      border-radius: 8px;
+      background: #1a1a2e;
+      color: #e2e8f0;
       font-size: 14px;
       outline: none;
-      transition: all 0.3s ease;
-      font-weight: 500;
+      transition: all 0.2s ease;
+      font-weight: 400;
     }
 
     .main-input::placeholder {
-      color: #a0aec0;
+      color: #64748b;
     }
 
     .main-input:focus {
-      border-color: #ff6b6b;
-      background: white;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
     }
 
     .explore-btn {
-      padding: 14px 28px;
-      background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
       color: white;
       border: none;
-      border-radius: 25px;
-      font-weight: 600;
+      border-radius: 8px;
+      font-weight: 500;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
       white-space: nowrap;
       font-size: 14px;
-      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
     }
 
     .explore-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
     }
 
     .mindmap-container {
@@ -111,14 +106,14 @@
       overflow: auto;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #0f0f23;
     }
 
     .canvas-wrapper {
-      width: 6000px;
-      height: 6000px;
+      width: 8000px;
+      height: 8000px;
       position: relative;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #0f0f23;
     }
 
     #mindmap {
@@ -131,16 +126,16 @@
     .mindmap-node {
       position: absolute;
       z-index: 10;
-      background: white;
-      border: 3px solid transparent;
-      border-radius: 20px;
+      background: #1a1a2e;
+      border: 2px solid #2a2a3e;
+      border-radius: 12px;
       padding: 16px 20px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-      min-width: 140px;
-      max-width: 200px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      min-width: 160px;
+      max-width: 220px;
       font-size: 13px;
-      font-weight: 600;
-      color: #2d3748;
+      font-weight: 500;
+      color: #e2e8f0;
       text-align: center;
       line-height: 1.4;
       cursor: pointer;
@@ -149,105 +144,160 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
+      gap: 8px;
+      backdrop-filter: blur(10px);
     }
 
     .mindmap-node:hover {
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
-      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      transform: translateY(-2px);
     }
 
     .mindmap-node.central {
-      background: linear-gradient(45deg, #667eea, #764ba2);
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
       color: white;
-      border-color: transparent;
-      min-width: 180px;
-      max-width: 240px;
-      font-size: 14px;
-      font-weight: 700;
-      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+      border-color: #6366f1;
+      min-width: 200px;
+      max-width: 280px;
+      font-size: 15px;
+      font-weight: 600;
+      box-shadow: 0 8px 32px rgba(99, 102, 241, 0.4);
     }
 
+    /* Beautiful dark theme color palette */
     .mindmap-node.level-1 { 
-      background: linear-gradient(45deg, #ff6b6b, #ee5a52); 
-      color: white; 
-      border-color: #ff6b6b;
+      background: rgba(99, 102, 241, 0.15);
+      color: #a5b4fc;
+      border-color: #6366f1;
+      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.2);
     }
     .mindmap-node.level-2 { 
-      background: linear-gradient(45deg, #4ecdc4, #44a08d); 
-      color: white; 
-      border-color: #4ecdc4;
+      background: rgba(34, 197, 94, 0.15);
+      color: #86efac;
+      border-color: #22c55e;
+      box-shadow: 0 4px 16px rgba(34, 197, 94, 0.2);
     }
     .mindmap-node.level-3 { 
-      background: linear-gradient(45deg, #45b7d1, #96c93d); 
-      color: white; 
-      border-color: #45b7d1;
+      background: rgba(251, 191, 36, 0.15);
+      color: #fde047;
+      border-color: #fbbf24;
+      box-shadow: 0 4px 16px rgba(251, 191, 36, 0.2);
     }
     .mindmap-node.level-4 { 
-      background: linear-gradient(45deg, #f093fb, #f5576c); 
-      color: white; 
-      border-color: #f093fb;
+      background: rgba(236, 72, 153, 0.15);
+      color: #f9a8d4;
+      border-color: #ec4899;
+      box-shadow: 0 4px 16px rgba(236, 72, 153, 0.2);
     }
     .mindmap-node.level-5 { 
-      background: linear-gradient(45deg, #4facfe, #00f2fe); 
-      color: white; 
-      border-color: #4facfe;
+      background: rgba(6, 182, 212, 0.15);
+      color: #67e8f9;
+      border-color: #06b6d4;
+      box-shadow: 0 4px 16px rgba(6, 182, 212, 0.2);
     }
     .mindmap-node.level-6 { 
-      background: linear-gradient(45deg, #a8edea, #fed6e3); 
-      color: #2d3748; 
-      border-color: #a8edea;
+      background: rgba(139, 92, 246, 0.15);
+      color: #c4b5fd;
+      border-color: #8b5cf6;
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
+    }
+    .mindmap-node.level-7 { 
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+      border-color: #ef4444;
+      box-shadow: 0 4px 16px rgba(239, 68, 68, 0.2);
+    }
+    .mindmap-node.level-8 { 
+      background: rgba(16, 185, 129, 0.15);
+      color: #6ee7b7;
+      border-color: #10b981;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.2);
+    }
+    .mindmap-node.level-9 { 
+      background: rgba(245, 158, 11, 0.15);
+      color: #fcd34d;
+      border-color: #f59e0b;
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.2);
+    }
+    .mindmap-node.level-10 { 
+      background: rgba(192, 38, 211, 0.15);
+      color: #e879f9;
+      border-color: #c026d3;
+      box-shadow: 0 4px 16px rgba(192, 38, 211, 0.2);
+    }
+    .mindmap-node.level-11 { 
+      background: rgba(5, 150, 105, 0.15);
+      color: #6ee7b7;
+      border-color: #059669;
+      box-shadow: 0 4px 16px rgba(5, 150, 105, 0.2);
+    }
+    .mindmap-node.level-12 { 
+      background: rgba(234, 88, 12, 0.15);
+      color: #fdba74;
+      border-color: #ea580c;
+      box-shadow: 0 4px 16px rgba(234, 88, 12, 0.2);
+    }
+    .mindmap-node.level-13 { 
+      background: rgba(148, 163, 184, 0.15);
+      color: #cbd5e1;
+      border-color: #94a3b8;
+      box-shadow: 0 4px 16px rgba(148, 163, 184, 0.2);
+    }
+    .mindmap-node.level-14 { 
+      background: rgba(132, 204, 22, 0.15);
+      color: #bef264;
+      border-color: #84cc16;
+      box-shadow: 0 4px 16px rgba(132, 204, 22, 0.2);
+    }
+    .mindmap-node.level-15 { 
+      background: rgba(168, 85, 247, 0.15);
+      color: #d8b4fe;
+      border-color: #a855f7;
+      box-shadow: 0 4px 16px rgba(168, 85, 247, 0.2);
     }
 
     .node-input {
-      position: absolute;
-      z-index: 15;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border: 2px solid rgba(255, 107, 107, 0.6);
-      border-radius: 15px;
-      padding: 12px;
-      box-shadow: 0 8px 25px rgba(255, 107, 107, 0.2);
-      min-width: 180px;
-      max-width: 220px;
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+      width: 100%;
     }
 
     .node-input input {
-      width: 100%;
-      padding: 8px 12px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.8);
-      font-size: 12px;
+      flex: 1;
+      padding: 6px 10px;
+      border: 1px solid #2a2a3e;
+      border-radius: 6px;
+      background: #1a1a2e;
+      font-size: 11px;
       outline: none;
-      margin-bottom: 8px;
-      color: #2d3748;
-      font-weight: 500;
-      transition: all 0.2s ease;
+      color: #e2e8f0;
+      font-weight: 400;
     }
 
     .node-input input:focus {
-      border-color: #ff6b6b;
-      background: white;
-      box-shadow: 0 2px 8px rgba(255, 107, 107, 0.2);
+      border-color: #6366f1;
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
     }
 
     .node-input button {
-      width: 100%;
-      padding: 8px 14px;
-      background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+      padding: 6px 12px;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
       color: white;
       border: none;
-      border-radius: 12px;
-      font-weight: 600;
+      border-radius: 6px;
+      font-weight: 500;
       cursor: pointer;
-      font-size: 12px;
+      font-size: 11px;
       transition: all 0.2s ease;
-      box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
     }
 
     .node-input button:hover {
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
     }
 
     .loading {
@@ -256,29 +306,30 @@
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 2000;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
+      background: #1a1a2e;
       padding: 24px 32px;
-      border-radius: 20px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
       display: none;
       text-align: center;
+      border: 1px solid #2a2a3e;
+      backdrop-filter: blur(10px);
     }
 
     .spinner {
-      width: 32px;
-      height: 32px;
-      border: 3px solid rgba(255, 107, 107, 0.2);
-      border-top: 3px solid #ff6b6b;
+      width: 24px;
+      height: 24px;
+      border: 2px solid #2a2a3e;
+      border-top: 2px solid #6366f1;
       border-radius: 50%;
       animation: spin 1s linear infinite;
       margin: 0 auto 12px;
     }
 
     .loading-text {
-      color: #2d3748;
+      color: #e2e8f0;
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 500;
     }
 
     @keyframes spin {
@@ -309,21 +360,15 @@
       }
 
       .mindmap-node {
-        min-width: 120px;
-        max-width: 160px;
+        min-width: 140px;
+        max-width: 180px;
         padding: 12px 16px;
         font-size: 12px;
       }
 
       .mindmap-node.central {
-        min-width: 150px;
-        max-width: 200px;
-      }
-
-      .node-input {
         min-width: 160px;
-        max-width: 200px;
-        padding: 10px;
+        max-width: 220px;
       }
 
       .main-input {
@@ -333,14 +378,42 @@
 
     @media (max-width: 480px) {
       .mindmap-node {
-        min-width: 100px;
-        max-width: 140px;
+        min-width: 120px;
+        max-width: 160px;
         padding: 10px 12px;
+        font-size: 11px;
       }
 
       .mindmap-node.central {
-        min-width: 130px;
-        max-width: 170px;
+        min-width: 140px;
+        max-width: 180px;
+      }
+
+      .header {
+        padding: 8px 12px;
+      }
+
+      .input-container {
+        gap: 8px;
+      }
+
+      .explore-btn {
+        padding: 12px 16px;
+        font-size: 13px;
+      }
+    }
+
+    @media (max-width: 320px) {
+      .mindmap-node {
+        min-width: 100px;
+        max-width: 140px;
+        padding: 8px 10px;
+        font-size: 10px;
+      }
+
+      .mindmap-node.central {
+        min-width: 120px;
+        max-width: 160px;
       }
     }
   </style>
@@ -348,7 +421,7 @@
 <body>
   <header class="header">
     <div class="logo">
-      🧠 What-If AI
+      💭 What-If Explorer
     </div>
     <div class="input-container">
       <input type="text" class="main-input" id="mainQuestion" placeholder="Ask a 'what if' question...">
@@ -363,7 +436,7 @@
 
   <div class="mindmap-container" id="scrollWrapper">
     <div class="canvas-wrapper" id="canvasWrapper">
-      <canvas id="mindmap" width="6000" height="6000"></canvas>
+      <canvas id="mindmap" width="8000" height="8000"></canvas>
     </div>
   </div>
 
@@ -380,13 +453,23 @@
     const centerY = canvas.height / 2;
     let currentLevel = 0;
 
+    // Enhanced color schemes for dark theme with better contrast and glow effects
     const colorSchemes = [
-      { line: '#ff6b6b', glow: 'rgba(255, 107, 107, 0.3)' },
-      { line: '#4ecdc4', glow: 'rgba(78, 205, 196, 0.3)' },
-      { line: '#45b7d1', glow: 'rgba(69, 183, 209, 0.3)' },
-      { line: '#f093fb', glow: 'rgba(240, 147, 251, 0.3)' },
-      { line: '#4facfe', glow: 'rgba(79, 172, 254, 0.3)' },
-      { line: '#a8edea', glow: 'rgba(168, 237, 234, 0.3)' }
+      { line: '#6366f1', glow: 'rgba(99, 102, 241, 0.5)' },
+      { line: '#22c55e', glow: 'rgba(34, 197, 94, 0.5)' },
+      { line: '#fbbf24', glow: 'rgba(251, 191, 36, 0.5)' },
+      { line: '#ec4899', glow: 'rgba(236, 72, 153, 0.5)' },
+      { line: '#06b6d4', glow: 'rgba(6, 182, 212, 0.5)' },
+      { line: '#8b5cf6', glow: 'rgba(139, 92, 246, 0.5)' },
+      { line: '#ef4444', glow: 'rgba(239, 68, 68, 0.5)' },
+      { line: '#10b981', glow: 'rgba(16, 185, 129, 0.5)' },
+      { line: '#f59e0b', glow: 'rgba(245, 158, 11, 0.5)' },
+      { line: '#c026d3', glow: 'rgba(192, 38, 211, 0.5)' },
+      { line: '#059669', glow: 'rgba(5, 150, 105, 0.5)' },
+      { line: '#ea580c', glow: 'rgba(234, 88, 12, 0.5)' },
+      { line: '#94a3b8', glow: 'rgba(148, 163, 184, 0.5)' },
+      { line: '#84cc16', glow: 'rgba(132, 204, 22, 0.5)' },
+      { line: '#a855f7', glow: 'rgba(168, 85, 247, 0.5)' }
     ];
 
     // Touch and mouse event handling
@@ -431,10 +514,11 @@
     function drawLine(x1, y1, x2, y2, level = 0) {
       const scheme = colorSchemes[level % colorSchemes.length];
       
-      // Draw glow effect
+      // Enhanced glow effect for dark theme
       ctx.shadowColor = scheme.glow;
-      ctx.shadowBlur = 15;
-      ctx.lineWidth = 4;
+      ctx.shadowBlur = 12;
+      
+      ctx.lineWidth = 3;
       ctx.strokeStyle = scheme.line;
       ctx.lineCap = 'round';
       ctx.beginPath();
@@ -442,41 +526,68 @@
       ctx.lineTo(x2, y2);
       ctx.stroke();
       
+      // Add a subtle inner glow
+      ctx.shadowBlur = 6;
+      ctx.strokeStyle = scheme.line;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+      
       // Reset shadow
+      ctx.shadowColor = 'transparent';
       ctx.shadowBlur = 0;
     }
 
-    function createMindmapNode(x, y, text, isCentral = false, level = 0) {
+    function createMindmapNode(x, y, text, isCentral = false, level = 0, showInput = false) {
       const node = document.createElement('div');
       let nodeClass = 'mindmap-node';
       
       if (isCentral) {
         nodeClass += ' central';
       } else if (level > 0) {
-        nodeClass += ` level-${level}`;
+        // Cycle through levels if we exceed our defined styles
+        const displayLevel = level > 15 ? ((level - 1) % 15) + 1 : level;
+        nodeClass += ` level-${displayLevel}`;
       }
       
       node.className = nodeClass;
-      node.textContent = text;
       
-      const minWidth = isCentral ? 180 : 140;
-      const maxWidth = isCentral ? 240 : 200;
-      const padding = isCentral ? 40 : 40;
+      const textDiv = document.createElement('div');
+      textDiv.textContent = text;
+      node.appendChild(textDiv);
+      
+      const minWidth = isCentral ? 200 : 160;
+      const maxWidth = isCentral ? 280 : 220;
+      const padding = 40;
       
       const textLength = text.length;
-      const estimatedWidth = Math.max(minWidth, Math.min(maxWidth, textLength * 8 + padding));
+      const estimatedWidth = Math.max(minWidth, Math.min(maxWidth, textLength * 7 + padding));
       
       node.style.width = estimatedWidth + 'px';
       node.style.left = (x - estimatedWidth / 2) + 'px';
-      node.style.top = (y - 25) + 'px';
+      node.style.top = (y - 30) + 'px';
+      
+      if (showInput && level < 20) { // Allow more levels
+        const inputDiv = document.createElement('div');
+        inputDiv.className = 'node-input';
+        const inputId = 'input-' + nodeId++;
+        inputDiv.innerHTML = `
+          <input type="text" id="${inputId}" placeholder="What if...">
+          <button onclick="addBranches('${inputId}', ${x}, ${y}, ${level})">Add</button>
+        `;
+        node.appendChild(inputDiv);
+      }
       
       wrapper.appendChild(node);
       
+      const nodeHeight = showInput ? 90 : 60;
       nodes.push({ 
         x, 
         y, 
         width: estimatedWidth, 
-        height: 50,
+        height: nodeHeight,
         element: node,
         level: level
       });
@@ -484,18 +595,21 @@
       return node;
     }
 
-    function findNonOverlappingPosition(targetX, targetY, width, height, minDistance = 140) {
+    function findNonOverlappingPosition(targetX, targetY, width, height, minDistance = 300) {
       let x = targetX;
       let y = targetY;
       let attempts = 0;
-      const maxAttempts = 30;
+      const maxAttempts = 200;
+      const spiralStep = 25;
 
       while (attempts < maxAttempts) {
         let hasCollision = false;
         
         for (const node of nodes) {
-          const distance = Math.sqrt((x - node.x) ** 2 + (y - node.y) ** 2);
-          const requiredDistance = Math.max(minDistance, (width + node.width) / 2 + 15);
+          const dx = x - node.x;
+          const dy = y - node.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          const requiredDistance = Math.max(minDistance, (width + node.width) / 2 + 60);
           
           if (distance < requiredDistance) {
             hasCollision = true;
@@ -504,11 +618,17 @@
         }
         
         if (!hasCollision) {
-          return { x, y };
+          // Ensure we're not too close to canvas edges
+          const margin = 300;
+          if (x > margin && x < canvas.width - margin && 
+              y > margin && y < canvas.height - margin) {
+            return { x, y };
+          }
         }
         
-        const angle = (attempts * 0.7) % (2 * Math.PI);
-        const radius = 40 + attempts * 12;
+        // Enhanced spiral pattern with better spacing
+        const angle = attempts * 0.7 + (Math.random() - 0.5) * 0.3;
+        const radius = spiralStep * Math.sqrt(attempts) + attempts * 8;
         x = targetX + radius * Math.cos(angle);
         y = targetY + radius * Math.sin(angle);
         attempts++;
@@ -517,66 +637,34 @@
       return { x: targetX, y: targetY };
     }
 
-    function addInputBox(x, y, level = 1) {
-      const input = document.createElement('div');
-      input.className = 'node-input';
-      
-      // Much closer positioning - reduced from 120 to 60
-      const position = findNonOverlappingPosition(x, y, 200, 60, 80);
-      input.style.left = (position.x - 100) + 'px';
-      input.style.top = (position.y - 30) + 'px';
-
-      const id = 'input-' + nodeId++;
-      input.innerHTML = `
-        <input type="text" id="${id}" placeholder="What if...">
-        <button onclick="addBranches('${id}', ${position.x}, ${position.y}, ${level})">Generate</button>
-      `;
-      wrapper.appendChild(input);
-
-      setTimeout(() => {
-        const inputElement = document.getElementById(id);
-        if (inputElement && window.innerWidth > 768) {
-          inputElement.focus();
-        }
-      }, 100);
-    }
-
-    function addBranches(id, x, y, level = 1) {
-      const question = document.getElementById(id).value.trim();
+    function addBranches(inputId, x, y, level = 1) {
+      const question = document.getElementById(inputId).value.trim();
       if (!question) return;
 
-      const inputElement = document.getElementById(id).closest('.node-input');
+      const inputElement = document.getElementById(inputId).closest('.node-input');
       if (inputElement) {
-        inputElement.style.opacity = '0';
-        setTimeout(() => inputElement.remove(), 300);
+        inputElement.style.display = 'none';
       }
 
       loading.style.display = 'block';
 
       setTimeout(() => {
         const branchingAnswers = generateAIResponses(question);
-        const baseRadius = Math.max(160, 180 - level * 10); // Closer branches for deeper levels
+        const baseRadius = Math.max(350, 400 - level * 25);
+        const nextLevel = level + 1;
 
         branchingAnswers.forEach((answer, i) => {
-          const angle = (i * 2 * Math.PI) / branchingAnswers.length;
+          // Use a more predictable angular distribution
+          const angleStep = (2 * Math.PI) / branchingAnswers.length;
+          const angle = i * angleStep + (Math.random() - 0.5) * 0.2; // Small randomization
+          
           const targetX = x + baseRadius * Math.cos(angle);
           const targetY = y + baseRadius * Math.sin(angle);
           
-          const position = findNonOverlappingPosition(targetX, targetY, 200, 50, 120);
+          const position = findNonOverlappingPosition(targetX, targetY, 220, 90, 300);
           
-          drawLine(x, y, position.x, position.y, level);
-          createMindmapNode(position.x, position.y, answer, false, level);
-          
-          if (level < 6) { // Limit depth to prevent infinite branching
-            setTimeout(() => {
-              // Much closer input positioning - reduced from 120 to 50
-              const inputOffset = 50;
-              const inputAngle = angle + (Math.random() - 0.5) * 0.4;
-              const inputX = position.x + inputOffset * Math.cos(inputAngle);
-              const inputY = position.y + inputOffset * Math.sin(inputAngle);
-              addInputBox(inputX, inputY, level + 1);
-            }, i * 120);
-          }
+          drawLine(x, y, position.x, position.y, nextLevel);
+          createMindmapNode(position.x, position.y, answer, false, nextLevel, true);
         });
 
         loading.style.display = 'none';
@@ -585,26 +673,45 @@
 
     function generateAIResponses(question) {
       const responses = [
-        "Society transforms dramatically",
-        "Technology evolves rapidly", 
-        "New opportunities emerge",
-        "Economic systems shift",
-        "Cultural changes occur",
-        "Environmental impact grows",
-        "Innovation accelerates",
+        "Society transforms fundamentally",
+        "Technology evolves exponentially", 
+        "New opportunities emerge globally",
+        "Economic systems adapt rapidly",
+        "Cultural paradigms shift",
+        "Environmental patterns change",
+        "Innovation accelerates dramatically",
         "Global connections strengthen",
-        "Educational systems adapt",
-        "Healthcare advances",
-        "Communication evolves",
-        "Work patterns change",
-        "Creative industries boom",
-        "Social dynamics shift",
-        "Ethical questions arise",
-        "Resource allocation changes"
+        "Educational approaches evolve",
+        "Healthcare systems advance",
+        "Communication methods transform",
+        "Work structures reorganize",
+        "Creative industries flourish",
+        "Social dynamics evolve",
+        "Ethical frameworks develop",
+        "Resource distribution changes",
+        "Human behavior adapts",
+        "Institutional structures shift",
+        "Scientific understanding grows",
+        "Collaborative models emerge",
+        "Governance systems adapt",
+        "Privacy concepts evolve",
+        "Identity frameworks change",
+        "Community structures shift",
+        "Learning paradigms transform",
+        "Digital landscapes expand",
+        "Artificial intelligence advances",
+        "Quantum computing emerges",
+        "Space exploration accelerates",
+        "Renewable energy proliferates",
+        "Biotechnology revolutionizes",
+        "Virtual reality transforms",
+        "Blockchain technology spreads",
+        "Sustainable practices grow",
+        "Mental health awareness rises"
       ];
 
       const shuffled = responses.sort(() => 0.5 - Math.random());
-      const count = Math.floor(Math.random() * 3) + 4;
+      const count = Math.floor(Math.random() * 3) + 4; // 4-6 responses
       return shuffled.slice(0, count);
     }
 
@@ -615,8 +722,9 @@
       loading.style.display = 'block';
       
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      document.querySelectorAll('.node-input, .mindmap-node').forEach(e => e.remove());
+      document.querySelectorAll('.mindmap-node').forEach(e => e.remove());
       nodes.length = 0;
+      nodeId = 0;
       currentLevel = 0;
 
       setTimeout(() => {
@@ -625,26 +733,18 @@
         createMindmapNode(cx, cy, question, true);
 
         const mainAnswers = generateAIResponses(question);
-        const baseRadius = 220; // Reduced from 280
+        const baseRadius = 400;
         
         mainAnswers.forEach((answer, i) => {
-          const angle = (i * 2 * Math.PI) / mainAnswers.length;
+          const angleStep = (2 * Math.PI) / mainAnswers.length;
+          const angle = i * angleStep;
           const targetX = cx + baseRadius * Math.cos(angle);
           const targetY = cy + baseRadius * Math.sin(angle);
           
-          const position = findNonOverlappingPosition(targetX, targetY, 200, 50, 160);
+          const position = findNonOverlappingPosition(targetX, targetY, 220, 90, 350);
           
           drawLine(cx, cy, position.x, position.y, 1);
-          createMindmapNode(position.x, position.y, answer, false, 1);
-          
-          setTimeout(() => {
-            // Much closer - reduced from 140 to 70
-            const inputOffset = 70;
-            const inputAngle = angle + (Math.random() - 0.5) * 0.3;
-            const inputX = position.x + inputOffset * Math.cos(inputAngle);
-            const inputY = position.y + inputOffset * Math.sin(inputAngle);
-            addInputBox(inputX, inputY, 2);
-          }, i * 150);
+          createMindmapNode(position.x, position.y, answer, false, 1, true);
         });
 
         setTimeout(() => {
@@ -654,7 +754,7 @@
             behavior: 'smooth'
           });
           loading.style.display = 'none';
-        }, mainAnswers.length * 150 + 500);
+        }, 1000);
       }, 600);
     }
 
