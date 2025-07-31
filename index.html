@@ -41,10 +41,9 @@
 
     .logo {
       font-family: "input-mono", monospace;
-font-weight: 300;
-font-style: italic;
+      font-weight: 300;
+      font-style: italic;
       font-size: 20px;
-    
       color: #e2e8f0;
       display: flex;
       align-items: center;
@@ -84,9 +83,8 @@ font-style: italic;
 
     .explore-btn {
       font-family: "input-mono", monospace;
-font-weight: 300;
-font-style: italic;
-    
+      font-weight: 300;
+      font-style: italic;
       padding: 12px 24px;
       background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
       color: white;
@@ -111,10 +109,9 @@ font-style: italic;
       left: 0;
       right: 0;
       bottom: 0;
-      overflow: auto;
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
+      overflow: hidden;
       background: #0f0f23;
+      touch-action: pan-x pan-y;
     }
 
     .canvas-wrapper {
@@ -122,6 +119,8 @@ font-style: italic;
       height: 8000px;
       position: relative;
       background: #0f0f23;
+      transform-origin: 0 0;
+      transition: transform 0.1s ease-out;
     }
 
     #mindmap {
@@ -155,6 +154,7 @@ font-style: italic;
       flex-direction: column;
       gap: 8px;
       backdrop-filter: blur(10px);
+      touch-action: manipulation;
     }
 
     .mindmap-node:hover {
@@ -164,8 +164,8 @@ font-style: italic;
 
     .mindmap-node.central {
       font-family: "input-mono", monospace;
-font-weight: 300;
-font-style: italic;
+      font-weight: 300;
+      font-style: italic;
       background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
       color: white;
       border-color: #6366f1;
@@ -304,6 +304,7 @@ font-style: italic;
       transition: all 0.2s ease;
       white-space: nowrap;
       box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+      touch-action: manipulation;
     }
 
     .node-input button:hover {
@@ -339,11 +340,66 @@ font-style: italic;
 
     .loading-text {
       font-family: "input-mono", monospace;
-font-weight: 300;
-font-style: italic;
+      font-weight: 300;
+      font-style: italic;
       color: #e2e8f0;
       font-size: 14px;
       font-weight: 500;
+    }
+
+    .zoom-controls {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .zoom-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #1a1a2e;
+      border: 2px solid #2a2a3e;
+      color: #e2e8f0;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transition: all 0.2s ease;
+      touch-action: manipulation;
+    }
+
+    .zoom-btn:hover {
+      background: #2a2a3e;
+      transform: translateY(-1px);
+    }
+
+    .center-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 1000;
+      padding: 12px 16px;
+      background: #1a1a2e;
+      border: 2px solid #2a2a3e;
+      border-radius: 24px;
+      color: #e2e8f0;
+      font-size: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transition: all 0.2s ease;
+      touch-action: manipulation;
+    }
+
+    .center-btn:hover {
+      background: #2a2a3e;
+      transform: translateY(-1px);
     }
 
     @keyframes spin {
@@ -351,18 +407,18 @@ font-style: italic;
       100% { transform: rotate(360deg); }
     }
 
-    /* Mobile-first responsive design */
+    /* Enhanced mobile responsiveness */
     @media (max-width: 768px) {
       .header {
-        padding: 10px 12px;
+        padding: 12px 16px;
         flex-direction: column;
         align-items: stretch;
-        gap: 8px;
+        gap: 12px;
       }
 
       .logo {
         text-align: center;
-        font-size: 16px;
+        font-size: 18px;
       }
 
       .input-container {
@@ -371,7 +427,56 @@ font-style: italic;
       }
 
       .mindmap-container {
-        top: 85px;
+        top: 120px;
+      }
+
+      .mindmap-node {
+        min-width: 120px;
+        max-width: 180px;
+        padding: 12px 16px;
+        font-size: 12px;
+      }
+
+      .mindmap-node.central {
+        min-width: 160px;
+        max-width: 220px;
+        font-size: 14px;
+      }
+
+      .main-input {
+        font-size: 16px;
+        padding: 14px 16px;
+      }
+
+      .explore-btn {
+        padding: 14px 20px;
+        font-size: 14px;
+      }
+
+      .zoom-controls {
+        bottom: 80px;
+        right: 16px;
+      }
+
+      .center-btn {
+        bottom: 80px;
+        left: 16px;
+        padding: 10px 14px;
+        font-size: 11px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header {
+        padding: 10px 12px;
+      }
+
+      .logo {
+        font-size: 16px;
+      }
+
+      .mindmap-container {
+        top: 110px;
       }
 
       .mindmap-node {
@@ -387,34 +492,52 @@ font-style: italic;
         font-size: 13px;
       }
 
-      .main-input {
-        font-size: 16px;
-        padding: 12px 14px;
+      .input-container {
+        gap: 8px;
       }
 
       .explore-btn {
-        padding: 12px 16px;
-        font-size: 14px;
+        padding: 14px 16px;
+        font-size: 13px;
+      }
+
+      .loading {
+        padding: 20px 24px;
+      }
+
+      .spinner {
+        width: 20px;
+        height: 20px;
+      }
+
+      .loading-text {
+        font-size: 13px;
+      }
+
+      .zoom-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+
+      .zoom-controls {
+        bottom: 70px;
+        right: 12px;
+      }
+
+      .center-btn {
+        bottom: 70px;
+        left: 12px;
+        padding: 8px 12px;
+        font-size: 10px;
       }
     }
 
-    @media (max-width: 480px) {
-      .header {
-        padding: 8px 10px;
-      }
-
-      .logo {
-        font-size: 15px;
-      }
-
-      .mindmap-container {
-        top: 80px;
-      }
-
+    @media (max-width: 360px) {
       .mindmap-node {
         min-width: 90px;
         max-width: 130px;
-        padding: 9px 10px;
+        padding: 8px 10px;
         font-size: 10px;
       }
 
@@ -424,53 +547,16 @@ font-style: italic;
         font-size: 12px;
       }
 
-      .input-container {
-        gap: 6px;
+      .header {
+        padding: 8px 10px;
+      }
+
+      .main-input {
+        padding: 12px 14px;
       }
 
       .explore-btn {
         padding: 12px 14px;
-        font-size: 13px;
-      }
-
-      .loading {
-        padding: 16px 24px;
-      }
-
-      .spinner {
-        width: 18px;
-        height: 18px;
-      }
-
-      .loading-text {
-        font-size: 12px;
-      }
-    }
-
-    @media (max-width: 360px) {
-      .mindmap-node {
-        min-width: 80px;
-        max-width: 120px;
-        padding: 8px 10px;
-        font-size: 9px;
-      }
-
-      .mindmap-node.central {
-        min-width: 110px;
-        max-width: 140px;
-        font-size: 11px;
-      }
-
-      .header {
-        padding: 6px 8px;
-      }
-
-      .main-input {
-        padding: 10px 12px;
-      }
-
-      .explore-btn {
-        padding: 10px 12px;
         font-size: 12px;
       }
     }
@@ -479,28 +565,28 @@ font-style: italic;
     @media (max-width: 768px) and (orientation: landscape) {
       .header {
         flex-direction: row;
-        padding: 8px 12px;
+        padding: 8px 16px;
       }
 
       .logo {
         text-align: left;
-        font-size: 14px;
+        font-size: 16px;
       }
 
       .mindmap-container {
-        top: 60px;
+        top: 70px;
       }
 
       .mindmap-node {
-        min-width: 90px;
-        max-width: 140px;
-        font-size: 10px;
+        min-width: 100px;
+        max-width: 150px;
+        font-size: 11px;
       }
 
       .mindmap-node.central {
-        min-width: 130px;
-        max-width: 170px;
-        font-size: 12px;
+        min-width: 140px;
+        max-width: 180px;
+        font-size: 13px;
       }
     }
 
@@ -516,7 +602,6 @@ font-style: italic;
       .main-input,
       .node-input input {
         font-size: 16px;
-      
       }
     }
   </style>
@@ -537,17 +622,24 @@ font-style: italic;
     <div class="loading-text">Generating insights...</div>
   </div>
 
-  <div class="mindmap-container" id="scrollWrapper">
+  <div class="mindmap-container" id="mindmapContainer">
     <div class="canvas-wrapper" id="canvasWrapper">
       <canvas id="mindmap" width="8000" height="8000"></canvas>
     </div>
   </div>
 
+  <div class="zoom-controls">
+    <button class="zoom-btn" id="zoomIn">+</button>
+    <button class="zoom-btn" id="zoomOut">−</button>
+  </div>
+
+  <button class="center-btn" id="centerBtn">Center</button>
+
   <script>
     const canvas = document.getElementById('mindmap');
     const ctx = canvas.getContext('2d');
     const wrapper = document.getElementById('canvasWrapper');
-    const scrollWrapper = document.getElementById('scrollWrapper');
+    const container = document.getElementById('mindmapContainer');
     const loading = document.getElementById('loading');
 
     let nodeId = 0;
@@ -555,6 +647,17 @@ font-style: italic;
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     let currentLevel = 0;
+
+    // Enhanced touch and pan variables
+    let scale = 1;
+    let panX = 0;
+    let panY = 0;
+    let isDragging = false;
+    let lastTouchX = 0;
+    let lastTouchY = 0;
+    let touchStartTime = 0;
+    let initialDistance = 0;
+    let initialScale = 1;
 
     // Enhanced color schemes for dark theme with better contrast and glow effects
     const colorSchemes = [
@@ -575,44 +678,121 @@ font-style: italic;
       { line: '#a855f7', glow: 'rgba(168, 85, 247, 0.5)' }
     ];
 
-    // Touch and mouse event handling
-    let isDragging = false;
-    let lastTouchX = 0;
-    let lastTouchY = 0;
-
-    function handleStart(e) {
-      isDragging = true;
-      const touch = e.touches ? e.touches[0] : e;
-      lastTouchX = touch.clientX;
-      lastTouchY = touch.clientY;
+    function updateTransform() {
+      wrapper.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
     }
 
-    function handleMove(e) {
-      if (!isDragging) return;
+    function getDistance(touch1, touch2) {
+      return Math.sqrt(
+        Math.pow(touch2.clientX - touch1.clientX, 2) +
+        Math.pow(touch2.clientY - touch1.clientY, 2)
+      );
+    }
+
+    function handleTouchStart(e) {
+      e.preventDefault();
+      touchStartTime = Date.now();
+      
+      if (e.touches.length === 1) {
+        isDragging = true;
+        lastTouchX = e.touches[0].clientX;
+        lastTouchY = e.touches[0].clientY;
+      } else if (e.touches.length === 2) {
+        isDragging = false;
+        initialDistance = getDistance(e.touches[0], e.touches[1]);
+        initialScale = scale;
+      }
+    }
+
+    function handleTouchMove(e) {
       e.preventDefault();
       
-      const touch = e.touches ? e.touches[0] : e;
-      const deltaX = touch.clientX - lastTouchX;
-      const deltaY = touch.clientY - lastTouchY;
-      
-      scrollWrapper.scrollLeft -= deltaX;
-      scrollWrapper.scrollTop -= deltaY;
-      
-      lastTouchX = touch.clientX;
-      lastTouchY = touch.clientY;
+      if (e.touches.length === 1 && isDragging) {
+        const deltaX = e.touches[0].clientX - lastTouchX;
+        const deltaY = e.touches[0].clientY - lastTouchY;
+        
+        panX += deltaX;
+        panY += deltaY;
+        
+        updateTransform();
+        
+        lastTouchX = e.touches[0].clientX;
+        lastTouchY = e.touches[0].clientY;
+      } else if (e.touches.length === 2) {
+        const currentDistance = getDistance(e.touches[0], e.touches[1]);
+        const scaleChange = currentDistance / initialDistance;
+        const newScale = Math.max(0.3, Math.min(3, initialScale * scaleChange));
+        
+        if (newScale !== scale) {
+          scale = newScale;
+          updateTransform();
+        }
+      }
     }
 
-    function handleEnd() {
+    function handleTouchEnd(e) {
+      e.preventDefault();
       isDragging = false;
     }
 
-    scrollWrapper.addEventListener('touchstart', handleStart, { passive: false });
-    scrollWrapper.addEventListener('touchmove', handleMove, { passive: false });
-    scrollWrapper.addEventListener('touchend', handleEnd);
-    scrollWrapper.addEventListener('mousedown', handleStart);
-    scrollWrapper.addEventListener('mousemove', handleMove);
-    scrollWrapper.addEventListener('mouseup', handleEnd);
-    scrollWrapper.addEventListener('mouseleave', handleEnd);
+    function handleMouseStart(e) {
+      isDragging = true;
+      lastTouchX = e.clientX;
+      lastTouchY = e.clientY;
+    }
+
+    function handleMouseMove(e) {
+      if (!isDragging) return;
+      
+      const deltaX = e.clientX - lastTouchX;
+      const deltaY = e.clientY - lastTouchY;
+      
+      panX += deltaX;
+      panY += deltaY;
+      
+      updateTransform();
+      
+      lastTouchX = e.clientX;
+      lastTouchY = e.clientY;
+    }
+
+    function handleMouseEnd() {
+      isDragging = false;
+    }
+
+    function handleWheel(e) {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? 0.9 : 1.1;
+      scale = Math.max(0.3, Math.min(3, scale * delta));
+      updateTransform();
+    }
+
+    // Event listeners
+    container.addEventListener('touchstart', handleTouchStart, { passive: false });
+    container.addEventListener('touchmove', handleTouchMove, { passive: false });
+    container.addEventListener('touchend', handleTouchEnd, { passive: false });
+    container.addEventListener('mousedown', handleMouseStart);
+    container.addEventListener('mousemove', handleMouseMove);
+    container.addEventListener('mouseup', handleMouseEnd);
+    container.addEventListener('mouseleave', handleMouseEnd);
+    container.addEventListener('wheel', handleWheel, { passive: false });
+
+    // Zoom controls
+    document.getElementById('zoomIn').addEventListener('click', () => {
+      scale = Math.min(3, scale * 1.2);
+      updateTransform();
+    });
+
+    document.getElementById('zoomOut').addEventListener('click', () => {
+      scale = Math.max(0.3, scale * 0.8);
+      updateTransform();
+    });
+
+    document.getElementById('centerBtn').addEventListener('click', () => {
+      panX = container.clientWidth / 2 - centerX * scale;
+      panY = container.clientHeight / 2 - centerY * scale;
+      updateTransform();
+    });
 
     function drawLine(x1, y1, x2, y2, level = 0) {
       const scheme = colorSchemes[level % colorSchemes.length];
@@ -830,6 +1010,12 @@ font-style: italic;
       nodeId = 0;
       currentLevel = 0;
 
+      // Reset transform
+      scale = 1;
+      panX = 0;
+      panY = 0;
+      updateTransform();
+
       setTimeout(() => {
         const cx = centerX;
         const cy = centerY;
@@ -851,11 +1037,10 @@ font-style: italic;
         });
 
         setTimeout(() => {
-          scrollWrapper.scrollTo({
-            top: cy - scrollWrapper.clientHeight / 2,
-            left: cx - scrollWrapper.clientWidth / 2,
-            behavior: 'smooth'
-          });
+          // Center the view on the central node
+          panX = container.clientWidth / 2 - centerX * scale;
+          panY = container.clientHeight / 2 - centerY * scale;
+          updateTransform();
           loading.style.display = 'none';
         }, 1000);
       }, 600);
@@ -877,6 +1062,3 @@ font-style: italic;
   </script>
 </body>
 </html>
-
-
-
