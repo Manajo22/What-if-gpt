@@ -700,8 +700,8 @@
       const timeDelta = currentTime - lastTime;
       
       if (timeDelta > 0) {
-        velocityX = deltaX / timeDelta * 16; // Normalize to 60fps
-        velocityY = deltaY / timeDelta * 16;
+        velocityX = deltaX / timeDelta * 20; // Normalize to 60fps
+        velocityY = deltaY / timeDelta * 20;
       }
       
       // Increased momentum factor for mobile - smoother and faster scrolling
@@ -727,12 +727,12 @@
     }
 
     function startMomentumScroll() {
-      const friction = 0.94; // Slightly less friction for longer momentum
-      const minVelocity = 0.3; // Lower threshold for smoother experience
+      const friction = 0.98; // Slightly less friction for longer momentum
+      const minVelocity = 0.1; // Lower threshold for smoother experience
       
       // Boost initial velocity for better mobile experience
-      velocityX *= 1.3;
-      velocityY *= 1.3;
+      velocityX *= 1.7;
+      velocityY *= 1.7;
 
       function animate() {
         if (Math.abs(velocityX) < minVelocity && Math.abs(velocityY) < minVelocity) {
