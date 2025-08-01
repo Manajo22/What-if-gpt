@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-  <title>What-If AI - Mindmap Explorer</title>
+  <title>What-if Engine</title>
   <link rel="stylesheet" href="https://use.typekit.net/xvl8ddx.css">
   <style>
     * {
@@ -103,15 +103,39 @@
       box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
     }
 
+    .center-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1001;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+      transition: all 0.3s ease;
+      display: none;
+    }
+
+    .center-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+    }
+
     .mindmap-container {
       position: fixed;
       top: 80px;
       left: 0;
       right: 0;
       bottom: 0;
-      overflow: hidden;
+      overflow: auto;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
       background: #0f0f23;
-      touch-action: pan-x pan-y;
     }
 
     .canvas-wrapper {
@@ -119,8 +143,6 @@
       height: 8000px;
       position: relative;
       background: #0f0f23;
-      transform-origin: 0 0;
-      transition: transform 0.1s ease-out;
     }
 
     #mindmap {
@@ -154,7 +176,6 @@
       flex-direction: column;
       gap: 8px;
       backdrop-filter: blur(10px);
-      touch-action: manipulation;
     }
 
     .mindmap-node:hover {
@@ -304,7 +325,6 @@
       transition: all 0.2s ease;
       white-space: nowrap;
       box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
-      touch-action: manipulation;
     }
 
     .node-input button:hover {
@@ -347,78 +367,23 @@
       font-weight: 500;
     }
 
-    .zoom-controls {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .zoom-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: #1a1a2e;
-      border: 2px solid #2a2a3e;
-      color: #e2e8f0;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      transition: all 0.2s ease;
-      touch-action: manipulation;
-    }
-
-    .zoom-btn:hover {
-      background: #2a2a3e;
-      transform: translateY(-1px);
-    }
-
-    .center-btn {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      z-index: 1000;
-      padding: 12px 16px;
-      background: #1a1a2e;
-      border: 2px solid #2a2a3e;
-      border-radius: 24px;
-      color: #e2e8f0;
-      font-size: 12px;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      transition: all 0.2s ease;
-      touch-action: manipulation;
-    }
-
-    .center-btn:hover {
-      background: #2a2a3e;
-      transform: translateY(-1px);
-    }
-
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
 
-    /* Enhanced mobile responsiveness */
+    /* Mobile-first responsive design */
     @media (max-width: 768px) {
       .header {
-        padding: 12px 16px;
+        padding: 10px 12px;
         flex-direction: column;
         align-items: stretch;
-        gap: 12px;
+        gap: 8px;
       }
 
       .logo {
         text-align: center;
-        font-size: 18px;
+        font-size: 16px;
       }
 
       .input-container {
@@ -427,56 +392,7 @@
       }
 
       .mindmap-container {
-        top: 120px;
-      }
-
-      .mindmap-node {
-        min-width: 120px;
-        max-width: 180px;
-        padding: 12px 16px;
-        font-size: 12px;
-      }
-
-      .mindmap-node.central {
-        min-width: 160px;
-        max-width: 220px;
-        font-size: 14px;
-      }
-
-      .main-input {
-        font-size: 16px;
-        padding: 14px 16px;
-      }
-
-      .explore-btn {
-        padding: 14px 20px;
-        font-size: 14px;
-      }
-
-      .zoom-controls {
-        bottom: 80px;
-        right: 16px;
-      }
-
-      .center-btn {
-        bottom: 80px;
-        left: 16px;
-        padding: 10px 14px;
-        font-size: 11px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .header {
-        padding: 10px 12px;
-      }
-
-      .logo {
-        font-size: 16px;
-      }
-
-      .mindmap-container {
-        top: 110px;
+        top: 85px;
       }
 
       .mindmap-node {
@@ -492,52 +408,50 @@
         font-size: 13px;
       }
 
-      .input-container {
-        gap: 8px;
+      .main-input {
+        font-size: 16px;
+        padding: 12px 14px;
       }
 
       .explore-btn {
-        padding: 14px 16px;
-        font-size: 13px;
-      }
-
-      .loading {
-        padding: 20px 24px;
-      }
-
-      .spinner {
-        width: 20px;
-        height: 20px;
-      }
-
-      .loading-text {
-        font-size: 13px;
-      }
-
-      .zoom-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 16px;
-      }
-
-      .zoom-controls {
-        bottom: 70px;
-        right: 12px;
+        padding: 12px 16px;
+        font-size: 14px;
       }
 
       .center-btn {
-        bottom: 70px;
-        left: 12px;
+        display: block;
+        bottom: 30px;
+        right: 20px;
+      }
+
+      .node-input input {
+        font-size: 16px;
         padding: 8px 12px;
-        font-size: 10px;
+      }
+
+      .node-input button {
+        padding: 8px 12px;
+        font-size: 12px;
       }
     }
 
-    @media (max-width: 360px) {
+    @media (max-width: 480px) {
+      .header {
+        padding: 8px 10px;
+      }
+
+      .logo {
+        font-size: 15px;
+      }
+
+      .mindmap-container {
+        top: 80px;
+      }
+
       .mindmap-node {
         min-width: 90px;
         max-width: 130px;
-        padding: 8px 10px;
+        padding: 9px 10px;
         font-size: 10px;
       }
 
@@ -547,16 +461,61 @@
         font-size: 12px;
       }
 
-      .header {
-        padding: 8px 10px;
-      }
-
-      .main-input {
-        padding: 12px 14px;
+      .input-container {
+        gap: 6px;
       }
 
       .explore-btn {
         padding: 12px 14px;
+        font-size: 13px;
+      }
+
+      .loading {
+        padding: 16px 24px;
+      }
+
+      .spinner {
+        width: 18px;
+        height: 18px;
+      }
+
+      .loading-text {
+        font-size: 12px;
+      }
+
+      .center-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+        bottom: 20px;
+        right: 16px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .mindmap-node {
+        min-width: 80px;
+        max-width: 120px;
+        padding: 8px 10px;
+        font-size: 9px;
+      }
+
+      .mindmap-node.central {
+        min-width: 110px;
+        max-width: 140px;
+        font-size: 11px;
+      }
+
+      .header {
+        padding: 6px 8px;
+      }
+
+      .main-input {
+        padding: 10px 12px;
+      }
+
+      .explore-btn {
+        padding: 10px 12px;
         font-size: 12px;
       }
     }
@@ -565,28 +524,28 @@
     @media (max-width: 768px) and (orientation: landscape) {
       .header {
         flex-direction: row;
-        padding: 8px 16px;
+        padding: 8px 12px;
       }
 
       .logo {
         text-align: left;
-        font-size: 16px;
+        font-size: 14px;
       }
 
       .mindmap-container {
-        top: 70px;
+        top: 60px;
       }
 
       .mindmap-node {
-        min-width: 100px;
-        max-width: 150px;
-        font-size: 11px;
+        min-width: 90px;
+        max-width: 140px;
+        font-size: 10px;
       }
 
       .mindmap-node.central {
-        min-width: 140px;
-        max-width: 180px;
-        font-size: 13px;
+        min-width: 130px;
+        max-width: 170px;
+        font-size: 12px;
       }
     }
 
@@ -609,7 +568,7 @@
 <body>
   <header class="header">
     <div class="logo">
-      What-If Explorer
+      What-If Engine
     </div>
     <div class="input-container">
       <input type="text" class="main-input" id="mainQuestion" placeholder="Ask a 'what if' question...">
@@ -617,47 +576,33 @@
     </div>
   </header>
 
+  <button class="center-btn" id="centerBtn">⌂</button>
+
   <div class="loading" id="loading">
     <div class="spinner"></div>
     <div class="loading-text">Generating insights...</div>
   </div>
 
-  <div class="mindmap-container" id="mindmapContainer">
+  <div class="mindmap-container" id="scrollWrapper">
     <div class="canvas-wrapper" id="canvasWrapper">
       <canvas id="mindmap" width="8000" height="8000"></canvas>
     </div>
   </div>
 
-  <div class="zoom-controls">
-    <button class="zoom-btn" id="zoomIn">+</button>
-    <button class="zoom-btn" id="zoomOut">−</button>
-  </div>
-
-  <button class="center-btn" id="centerBtn">Center</button>
-
   <script>
     const canvas = document.getElementById('mindmap');
     const ctx = canvas.getContext('2d');
     const wrapper = document.getElementById('canvasWrapper');
-    const container = document.getElementById('mindmapContainer');
+    const scrollWrapper = document.getElementById('scrollWrapper');
     const loading = document.getElementById('loading');
+    const centerBtn = document.getElementById('centerBtn');
 
     let nodeId = 0;
     const nodes = [];
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     let currentLevel = 0;
-
-    // Enhanced touch and pan variables
-    let scale = 1;
-    let panX = 0;
-    let panY = 0;
-    let isDragging = false;
-    let lastTouchX = 0;
-    let lastTouchY = 0;
-    let touchStartTime = 0;
-    let initialDistance = 0;
-    let initialScale = 1;
+    let centralNodePosition = { x: centerX, y: centerY };
 
     // Enhanced color schemes for dark theme with better contrast and glow effects
     const colorSchemes = [
@@ -678,120 +623,138 @@
       { line: '#a855f7', glow: 'rgba(168, 85, 247, 0.5)' }
     ];
 
-    function updateTransform() {
-      wrapper.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
-    }
+    // Touch and mouse event handling with momentum
+    let isDragging = false;
+    let lastTouchX = 0;
+    let lastTouchY = 0;
+    let velocityX = 0;
+    let velocityY = 0;
+    let lastTime = 0;
+    let momentumAnimation = null;
+    let isInputFocused = false;
 
-    function getDistance(touch1, touch2) {
-      return Math.sqrt(
-        Math.pow(touch2.clientX - touch1.clientX, 2) +
-        Math.pow(touch2.clientY - touch1.clientY, 2)
-      );
-    }
+    // Detect if user is on mobile
+    const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                     ('ontouchstart' in window) || 
+                     (navigator.maxTouchPoints > 0);
 
-    function handleTouchStart(e) {
-      e.preventDefault();
-      touchStartTime = Date.now();
-      
-      if (e.touches.length === 1) {
-        isDragging = true;
-        lastTouchX = e.touches[0].clientX;
-        lastTouchY = e.touches[0].clientY;
-      } else if (e.touches.length === 2) {
-        isDragging = false;
-        initialDistance = getDistance(e.touches[0], e.touches[1]);
-        initialScale = scale;
+    function handleStart(e) {
+      // Don't drag if user is interacting with an input
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') {
+        return;
       }
-    }
 
-    function handleTouchMove(e) {
-      e.preventDefault();
-      
-      if (e.touches.length === 1 && isDragging) {
-        const deltaX = e.touches[0].clientX - lastTouchX;
-        const deltaY = e.touches[0].clientY - lastTouchY;
-        
-        panX += deltaX;
-        panY += deltaY;
-        
-        updateTransform();
-        
-        lastTouchX = e.touches[0].clientX;
-        lastTouchY = e.touches[0].clientY;
-      } else if (e.touches.length === 2) {
-        const currentDistance = getDistance(e.touches[0], e.touches[1]);
-        const scaleChange = currentDistance / initialDistance;
-        const newScale = Math.max(0.3, Math.min(3, initialScale * scaleChange));
-        
-        if (newScale !== scale) {
-          scale = newScale;
-          updateTransform();
-        }
-      }
-    }
-
-    function handleTouchEnd(e) {
-      e.preventDefault();
-      isDragging = false;
-    }
-
-    function handleMouseStart(e) {
       isDragging = true;
-      lastTouchX = e.clientX;
-      lastTouchY = e.clientY;
+      const touch = e.touches ? e.touches[0] : e;
+      lastTouchX = touch.clientX;
+      lastTouchY = touch.clientY;
+      lastTime = Date.now();
+      velocityX = 0;
+      velocityY = 0;
+      
+      // Cancel any ongoing momentum
+      if (momentumAnimation) {
+        cancelAnimationFrame(momentumAnimation);
+        momentumAnimation = null;
+      }
+
+      // Prevent default only on canvas area, not on inputs
+      if (!e.target.closest('.node-input')) {
+        e.preventDefault();
+      }
     }
 
-    function handleMouseMove(e) {
+    function handleMove(e) {
       if (!isDragging) return;
       
-      const deltaX = e.clientX - lastTouchX;
-      const deltaY = e.clientY - lastTouchY;
+      const touch = e.touches ? e.touches[0] : e;
+      const deltaX = touch.clientX - lastTouchX;
+      const deltaY = touch.clientY - lastTouchY;
+      const currentTime = Date.now();
+      const timeDelta = currentTime - lastTime;
       
-      panX += deltaX;
-      panY += deltaY;
+      if (timeDelta > 0) {
+        velocityX = deltaX / timeDelta * 16; // Normalize to 60fps
+        velocityY = deltaY / timeDelta * 16;
+      }
       
-      updateTransform();
+      // Apply smooth movement with momentum factor for mobile
+      const momentum = isMobile ? 1.5 : 1;
+      scrollWrapper.scrollLeft -= deltaX * momentum;
+      scrollWrapper.scrollTop -= deltaY * momentum;
       
-      lastTouchX = e.clientX;
-      lastTouchY = e.clientY;
-    }
+      lastTouchX = touch.clientX;
+      lastTouchY = touch.clientY;
+      lastTime = currentTime;
 
-    function handleMouseEnd() {
-      isDragging = false;
-    }
-
-    function handleWheel(e) {
       e.preventDefault();
-      const delta = e.deltaY > 0 ? 0.9 : 1.1;
-      scale = Math.max(0.3, Math.min(3, scale * delta));
-      updateTransform();
     }
 
-    // Event listeners
-    container.addEventListener('touchstart', handleTouchStart, { passive: false });
-    container.addEventListener('touchmove', handleTouchMove, { passive: false });
-    container.addEventListener('touchend', handleTouchEnd, { passive: false });
-    container.addEventListener('mousedown', handleMouseStart);
-    container.addEventListener('mousemove', handleMouseMove);
-    container.addEventListener('mouseup', handleMouseEnd);
-    container.addEventListener('mouseleave', handleMouseEnd);
-    container.addEventListener('wheel', handleWheel, { passive: false });
+    function handleEnd(e) {
+      if (!isDragging) return;
+      isDragging = false;
 
-    // Zoom controls
-    document.getElementById('zoomIn').addEventListener('click', () => {
-      scale = Math.min(3, scale * 1.2);
-      updateTransform();
+      // Add momentum scrolling for mobile
+      if (isMobile && (Math.abs(velocityX) > 1 || Math.abs(velocityY) > 1)) {
+        startMomentumScroll();
+      }
+    }
+
+    function startMomentumScroll() {
+      const friction = 0.92;
+      const minVelocity = 0.5;
+
+      function animate() {
+        if (Math.abs(velocityX) < minVelocity && Math.abs(velocityY) < minVelocity) {
+          momentumAnimation = null;
+          return;
+        }
+
+        scrollWrapper.scrollLeft -= velocityX;
+        scrollWrapper.scrollTop -= velocityY;
+        
+        velocityX *= friction;
+        velocityY *= friction;
+        
+        momentumAnimation = requestAnimationFrame(animate);
+      }
+      
+      momentumAnimation = requestAnimationFrame(animate);
+    }
+
+    // Event listeners with improved mobile support
+    if (isMobile) {
+      scrollWrapper.addEventListener('touchstart', handleStart, { passive: false });
+      scrollWrapper.addEventListener('touchmove', handleMove, { passive: false });
+      scrollWrapper.addEventListener('touchend', handleEnd, { passive: false });
+    } else {
+      // Desktop mouse events
+      scrollWrapper.addEventListener('mousedown', handleStart);
+      scrollWrapper.addEventListener('mousemove', handleMove);
+      scrollWrapper.addEventListener('mouseup', handleEnd);
+      scrollWrapper.addEventListener('mouseleave', handleEnd);
+    }
+
+    // Center button functionality
+    centerBtn.addEventListener('click', () => {
+      scrollWrapper.scrollTo({
+        top: centralNodePosition.y - scrollWrapper.clientHeight / 2,
+        left: centralNodePosition.x - scrollWrapper.clientWidth / 2,
+        behavior: 'smooth'
+      });
     });
 
-    document.getElementById('zoomOut').addEventListener('click', () => {
-      scale = Math.max(0.3, scale * 0.8);
-      updateTransform();
+    // Prevent dragging when focusing inputs
+    document.addEventListener('focusin', (e) => {
+      if (e.target.tagName === 'INPUT') {
+        isInputFocused = true;
+      }
     });
 
-    document.getElementById('centerBtn').addEventListener('click', () => {
-      panX = container.clientWidth / 2 - centerX * scale;
-      panY = container.clientHeight / 2 - centerY * scale;
-      updateTransform();
+    document.addEventListener('focusout', (e) => {
+      if (e.target.tagName === 'INPUT') {
+        isInputFocused = false;
+      }
     });
 
     function drawLine(x1, y1, x2, y2, level = 0) {
@@ -829,6 +792,7 @@
       
       if (isCentral) {
         nodeClass += ' central';
+        centralNodePosition = { x, y };
       } else if (level > 0) {
         // Cycle through levels if we exceed our defined styles
         const displayLevel = level > 15 ? ((level - 1) % 15) + 1 : level;
@@ -857,7 +821,7 @@
         inputDiv.className = 'node-input';
         const inputId = 'input-' + nodeId++;
         inputDiv.innerHTML = `
-          <input type="text" id="${inputId}" placeholder="What if...">
+          <input type="text" id="${inputId}" placeholder="What if..." autocomplete="off">
           <button onclick="addBranches('${inputId}', ${x}, ${y}, ${level})">Add</button>
         `;
         node.appendChild(inputDiv);
@@ -1010,12 +974,6 @@
       nodeId = 0;
       currentLevel = 0;
 
-      // Reset transform
-      scale = 1;
-      panX = 0;
-      panY = 0;
-      updateTransform();
-
       setTimeout(() => {
         const cx = centerX;
         const cy = centerY;
@@ -1037,10 +995,11 @@
         });
 
         setTimeout(() => {
-          // Center the view on the central node
-          panX = container.clientWidth / 2 - centerX * scale;
-          panY = container.clientHeight / 2 - centerY * scale;
-          updateTransform();
+          scrollWrapper.scrollTo({
+            top: cy - scrollWrapper.clientHeight / 2,
+            left: cx - scrollWrapper.clientWidth / 2,
+            behavior: 'smooth'
+          });
           loading.style.display = 'none';
         }, 1000);
       }, 600);
