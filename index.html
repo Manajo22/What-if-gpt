@@ -396,16 +396,16 @@
       }
 
       .mindmap-node {
-        min-width: 100px;
-        max-width: 150px;
-        padding: 10px 12px;
-        font-size: 11px;
+        min-width: 120px;
+        max-width: 170px;
+        padding: 12px 14px;
+        font-size: 12px;
       }
 
       .mindmap-node.central {
-        min-width: 140px;
-        max-width: 180px;
-        font-size: 13px;
+        min-width: 160px;
+        max-width: 200px;
+        font-size: 14px;
       }
 
       .main-input {
@@ -426,12 +426,14 @@
 
       .node-input input {
         font-size: 16px;
-        padding: 8px 12px;
+        padding: 10px 12px;
+        min-height: 44px;
       }
 
       .node-input button {
-        padding: 8px 12px;
-        font-size: 12px;
+        padding: 10px 14px;
+        font-size: 13px;
+        min-height: 44px;
       }
     }
 
@@ -449,16 +451,16 @@
       }
 
       .mindmap-node {
-        min-width: 90px;
-        max-width: 130px;
-        padding: 9px 10px;
-        font-size: 10px;
+        min-width: 110px;
+        max-width: 150px;
+        padding: 11px 13px;
+        font-size: 11px;
       }
 
       .mindmap-node.central {
-        min-width: 120px;
-        max-width: 160px;
-        font-size: 12px;
+        min-width: 140px;
+        max-width: 180px;
+        font-size: 13px;
       }
 
       .input-container {
@@ -490,20 +492,32 @@
         bottom: 20px;
         right: 16px;
       }
+
+      .node-input input {
+        font-size: 16px;
+        padding: 12px;
+        min-height: 48px;
+      }
+
+      .node-input button {
+        padding: 12px 16px;
+        font-size: 14px;
+        min-height: 48px;
+      }
     }
 
     @media (max-width: 360px) {
       .mindmap-node {
-        min-width: 80px;
-        max-width: 120px;
-        padding: 8px 10px;
-        font-size: 9px;
+        min-width: 100px;
+        max-width: 140px;
+        padding: 10px 12px;
+        font-size: 10px;
       }
 
       .mindmap-node.central {
-        min-width: 110px;
-        max-width: 140px;
-        font-size: 11px;
+        min-width: 130px;
+        max-width: 160px;
+        font-size: 12px;
       }
 
       .header {
@@ -517,6 +531,18 @@
       .explore-btn {
         padding: 10px 12px;
         font-size: 12px;
+      }
+
+      .node-input input {
+        font-size: 16px;
+        padding: 12px;
+        min-height: 48px;
+      }
+
+      .node-input button {
+        padding: 12px 14px;
+        font-size: 13px;
+        min-height: 48px;
       }
     }
 
@@ -623,7 +649,7 @@
       { line: '#a855f7', glow: 'rgba(168, 85, 247, 0.5)' }
     ];
 
-    // Touch and mouse event handling with momentum
+    // Touch and mouse event handling with increased momentum for mobile
     let isDragging = false;
     let lastTouchX = 0;
     let lastTouchY = 0;
@@ -678,8 +704,8 @@
         velocityY = deltaY / timeDelta * 16;
       }
       
-      // Apply smooth movement with momentum factor for mobile
-      const momentum = isMobile ? 1.5 : 1;
+      // Increased momentum factor for mobile - smoother and faster scrolling
+      const momentum = isMobile ? 2.2 : 1;
       scrollWrapper.scrollLeft -= deltaX * momentum;
       scrollWrapper.scrollTop -= deltaY * momentum;
       
@@ -694,15 +720,19 @@
       if (!isDragging) return;
       isDragging = false;
 
-      // Add momentum scrolling for mobile
-      if (isMobile && (Math.abs(velocityX) > 1 || Math.abs(velocityY) > 1)) {
+      // Enhanced momentum scrolling for mobile with increased velocity
+      if (isMobile && (Math.abs(velocityX) > 0.8 || Math.abs(velocityY) > 0.8)) {
         startMomentumScroll();
       }
     }
 
     function startMomentumScroll() {
-      const friction = 0;
-      const minVelocity = 5;
+      const friction = 0.94; // Slightly less friction for longer momentum
+      const minVelocity = 0.3; // Lower threshold for smoother experience
+      
+      // Boost initial velocity for better mobile experience
+      velocityX *= 1.3;
+      velocityY *= 1.3;
 
       function animate() {
         if (Math.abs(velocityX) < minVelocity && Math.abs(velocityY) < minVelocity) {
@@ -805,9 +835,22 @@
       textDiv.textContent = text;
       node.appendChild(textDiv);
       
-      const minWidth = isCentral ? 200 : 160;
-      const maxWidth = isCentral ? 280 : 220;
-      const padding = 40;
+      // Mobile-responsive sizing
+      let minWidth, maxWidth, padding;
+      if (isMobile) {
+        if (isCentral) {
+          minWidth = window.innerWidth < 480 ? 140 : 160;
+          maxWidth = window.innerWidth < 480 ? 180 : 200;
+        } else {
+          minWidth = window.innerWidth < 480 ? 110 : 120;
+          maxWidth = window.innerWidth < 480 ? 150 : 170;
+        }
+        padding = 30;
+      } else {
+        minWidth = isCentral ? 200 : 160;
+        maxWidth = isCentral ? 280 : 220;
+        padding = 40;
+      }
       
       const textLength = text.length;
       const estimatedWidth = Math.max(minWidth, Math.min(maxWidth, textLength * 7 + padding));
@@ -847,7 +890,10 @@
       let y = targetY;
       let attempts = 0;
       const maxAttempts = 200;
-      const spiralStep = 25;
+      
+      // Adjust spacing for mobile
+      const spiralStep = isMobile ? 20 : 25;
+      const adjustedMinDistance = isMobile ? Math.max(200, minDistance * 0.8) : minDistance;
 
       while (attempts < maxAttempts) {
         let hasCollision = false;
@@ -856,7 +902,7 @@
           const dx = x - node.x;
           const dy = y - node.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
-          const requiredDistance = Math.max(minDistance, (width + node.width) / 2 + 60);
+          const requiredDistance = Math.max(adjustedMinDistance, (width + node.width) / 2 + (isMobile ? 40 : 60));
           
           if (distance < requiredDistance) {
             hasCollision = true;
@@ -866,7 +912,7 @@
         
         if (!hasCollision) {
           // Ensure we're not too close to canvas edges
-          const margin = 300;
+          const margin = isMobile ? 200 : 300;
           if (x > margin && x < canvas.width - margin && 
               y > margin && y < canvas.height - margin) {
             return { x, y };
@@ -875,7 +921,7 @@
         
         // Enhanced spiral pattern with better spacing
         const angle = attempts * 0.7 + (Math.random() - 0.5) * 0.3;
-        const radius = spiralStep * Math.sqrt(attempts) + attempts * 8;
+        const radius = spiralStep * Math.sqrt(attempts) + attempts * (isMobile ? 6 : 8);
         x = targetX + radius * Math.cos(angle);
         y = targetY + radius * Math.sin(angle);
         attempts++;
@@ -897,7 +943,7 @@
 
       setTimeout(() => {
         const branchingAnswers = generateAIResponses(question);
-        const baseRadius = Math.max(350, 400 - level * 25);
+        const baseRadius = isMobile ? Math.max(250, 300 - level * 20) : Math.max(350, 400 - level * 25);
         const nextLevel = level + 1;
 
         branchingAnswers.forEach((answer, i) => {
@@ -908,7 +954,11 @@
           const targetX = x + baseRadius * Math.cos(angle);
           const targetY = y + baseRadius * Math.sin(angle);
           
-          const position = findNonOverlappingPosition(targetX, targetY, 220, 90, 300);
+          const nodeWidth = isMobile ? 150 : 220;
+          const nodeHeight = 90;
+          const minDistance = isMobile ? 200 : 300;
+          
+          const position = findNonOverlappingPosition(targetX, targetY, nodeWidth, nodeHeight, minDistance);
           
           drawLine(x, y, position.x, position.y, nextLevel);
           createMindmapNode(position.x, position.y, answer, false, nextLevel, true);
@@ -980,7 +1030,7 @@
         createMindmapNode(cx, cy, question, true);
 
         const mainAnswers = generateAIResponses(question);
-        const baseRadius = 400;
+        const baseRadius = isMobile ? 300 : 400;
         
         mainAnswers.forEach((answer, i) => {
           const angleStep = (2 * Math.PI) / mainAnswers.length;
@@ -988,7 +1038,11 @@
           const targetX = cx + baseRadius * Math.cos(angle);
           const targetY = cy + baseRadius * Math.sin(angle);
           
-          const position = findNonOverlappingPosition(targetX, targetY, 220, 90, 350);
+          const nodeWidth = isMobile ? 150 : 220;
+          const nodeHeight = 90;
+          const minDistance = isMobile ? 250 : 350;
+          
+          const position = findNonOverlappingPosition(targetX, targetY, nodeWidth, nodeHeight, minDistance);
           
           drawLine(cx, cy, position.x, position.y, 1);
           createMindmapNode(position.x, position.y, answer, false, 1, true);
