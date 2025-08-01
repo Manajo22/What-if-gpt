@@ -701,8 +701,8 @@
     }
 
     function startMomentumScroll() {
-      const friction = 0.92;
-      const minVelocity = 0.5;
+      const friction = 0;
+      const minVelocity = 5;
 
       function animate() {
         if (Math.abs(velocityX) < minVelocity && Math.abs(velocityY) < minVelocity) {
