@@ -618,6 +618,12 @@
   <script>
     const canvas = document.getElementById('mindmap');
     const ctx = canvas.getContext('2d');
+
+    let scrollX = 0;
+let scrollY = 0;
+let zoom = 1;
+let velocityX = 0;
+let velocityY = 0;
     const wrapper = document.getElementById('canvasWrapper');
     const scrollWrapper = document.getElementById('scrollWrapper');
     const loading = document.getElementById('loading');
@@ -700,12 +706,12 @@
       const timeDelta = currentTime - lastTime;
       
       if (timeDelta > 0) {
-        velocityX = deltaX / timeDelta * 20; // Normalize to 60fps
-        velocityY = deltaY / timeDelta * 20;
+        velocityX = deltaX / timeDelta * 40; // Normalize to 60fps
+        velocityY = deltaY / timeDelta * 40;
       }
       
       // Increased momentum factor for mobile - smoother and faster scrolling
-      const momentum = isMobile ? 2.2 : 1;
+      const momentum = isMobile ? 4 : 1;
       scrollWrapper.scrollLeft -= deltaX * momentum;
       scrollWrapper.scrollTop -= deltaY * momentum;
       
@@ -728,11 +734,11 @@
 
     function startMomentumScroll() {
       const friction = 0.98; // Slightly less friction for longer momentum
-      const minVelocity = 0.1; // Lower threshold for smoother experience
+      const minVelocity = 0.05; // Lower threshold for smoother experience
       
       // Boost initial velocity for better mobile experience
-      velocityX *= 1.7;
-      velocityY *= 1.7;
+      velocityX *= 7;
+      velocityY *= 7;
 
       function animate() {
         if (Math.abs(velocityX) < minVelocity && Math.abs(velocityY) < minVelocity) {
