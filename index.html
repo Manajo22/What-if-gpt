@@ -693,30 +693,27 @@ Food for thought
     }
 
     function handleMove(e) {
-      if (!isDragging) return;
-      
-      const touch = e.touches ? e.touches[0] : e;
-      const deltaX = touch.clientX - lastTouchX;
-      const deltaY = touch.clientY - lastTouchY;
-      const currentTime = Date.now();
-      const timeDelta = currentTime - lastTime;
-      
-      if (timeDelta > 0) {
-        velocityX = deltaX / timeDelta * 20; // Normalize to 60fps
-        velocityY = deltaY / timeDelta * 20;
-      }
-      
-      // Increased momentum factor for mobile - smoother and faster scrolling
-      const momentum = isMobile ? 2.2 : 1;
-      scrollWrapper.scrollLeft -= deltaX * momentum;
-      scrollWrapper.scrollTop -= deltaY * momentum;
-      
-      lastTouchX = touch.clientX;
-      lastTouchY = touch.clientY;
-      lastTime = currentTime;
+  if (!isDragging) return;
+  const touch = e.touches ? e.touches[0] : e;
+  const deltaX = touch.clientX - lastTouchX;
+  const deltaY = touch.clientY - lastTouchY;
 
-      e.preventDefault();
-    }
+  const speedMultiplier = isMobile ? 3.0 : 1; // Increase this if you want it faster
+  scrollX -= deltaX * speedMultiplier;
+  scrollY -= deltaY * speedMultiplier;
+
+  lastTouchX = touch.clientX;
+  lastTouchY = touch.clientY;
+
+  const now = Date.now();
+  const dt = now - lastTime;
+  velocityX = (deltaX / dt) * speedMultiplier;
+  velocityY = (deltaY / dt) * speedMultiplier;
+  lastTime = now;
+
+  drawMindmap();
+}
+
 
     function handleEnd(e) {
       if (!isDragging) return;
@@ -733,8 +730,8 @@ Food for thought
       const minVelocity = 0.05; // Lower threshold for smoother experience
       
       // Boost initial velocity for better mobile experience
-      velocityX *= 5;
-      velocityY *= 5;
+      velocityX *= 7;
+      velocityY *= 7;
 
       function animate() {
         if (Math.abs(velocityX) < minVelocity && Math.abs(velocityY) < minVelocity) {
@@ -745,8 +742,18 @@ Food for thought
         scrollWrapper.scrollLeft -= velocityX;
         scrollWrapper.scrollTop -= velocityY;
         
-        velocityX *= friction;
-        velocityY *= friction;
+       const decay = isMobile ? 0.92 : 0.95;
+velocityX *= decay;
+velocityY *= decay;
+scrollX -= velocityX;
+scrollY -= velocityY;
+
+velocityX *= 0.9;
+velocityY *= 0.9;
+
+if (Math.abs(velocityX) < 0.1) velocityX = 0;
+if (Math.abs(velocityY) < 0.1) velocityY = 0;
+
         
         momentumAnimation = requestAnimationFrame(animate);
       }
