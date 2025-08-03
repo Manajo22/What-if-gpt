@@ -729,12 +729,12 @@ Food for thought
     }
 
     function startMomentumScroll() {
-      const friction = 0.98; // Slightly less friction for longer momentum
-      const minVelocity = 0.05; // Lower threshold for smoother experience
+      const friction = 0.95; // Reduced friction for faster scrolling
+      const minVelocity = 0.02; // Lower threshold for longer scrolling
       
       // Boost initial velocity for better mobile experience
-      velocityX *= 5;
-      velocityY *= 5;
+      velocityX *= 6; // Increased from 5 to 6
+      velocityY *= 6; // Increased from 5 to 6
 
       function animate() {
         if (Math.abs(velocityX) < minVelocity && Math.abs(velocityY) < minVelocity) {
@@ -842,9 +842,6 @@ Food for thought
       if (isMobile) {
         if (isCentral) {
           minWidth = window.innerWidth < 480 ? 140 : 160;
-          maxWidth = window.innerWidth < 480 ? 180 : 200;
-        } else {
-          minWidth = window.innerWidth < 480 ? 110 : 120;
           maxWidth = window.innerWidth < 480 ? 150 : 170;
         }
         padding = 30;
@@ -1076,4 +1073,5 @@ Food for thought
     window.addBranches = addBranches;
   </script>
 </body>
-</html>
+</html>? 180 : 200;
+       
