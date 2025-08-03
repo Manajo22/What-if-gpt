@@ -20,6 +20,8 @@
       overflow: hidden;
       touch-action: none;
       color: #e2e8f0;
+      position: fixed;
+      width: 100%;
     }
 
     .header {
@@ -132,10 +134,14 @@
       left: 0;
       right: 0;
       bottom: 0;
-      overflow: auto;
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
+      overflow: hidden;
       background: #0f0f23;
+      touch-action: none;
+      cursor: grab;
+    }
+
+    .mindmap-container:active {
+      cursor: grabbing;
     }
 
     .canvas-wrapper {
@@ -143,6 +149,8 @@
       height: 8000px;
       position: relative;
       background: #0f0f23;
+      transform-origin: 0 0;
+      will-change: transform;
     }
 
     #mindmap {
@@ -176,6 +184,7 @@
       flex-direction: column;
       gap: 8px;
       backdrop-filter: blur(10px);
+      pointer-events: auto;
     }
 
     .mindmap-node:hover {
@@ -422,6 +431,9 @@
         display: block;
         bottom: 30px;
         right: 20px;
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
       }
 
       .node-input input {
@@ -488,7 +500,7 @@
       .center-btn {
         width: 48px;
         height: 48px;
-        font-size: 20px;
+        font-size: 18px;
         bottom: 20px;
         right: 16px;
       }
@@ -649,10 +661,10 @@ Food for thought
       { line: '#a855f7', glow: 'rgba(168, 85, 247, 0.5)' }
     ];
 
-    // Smooth scrolling variables
+    // Transform-based panning system
+    let panX = -centerX + scrollWrapper.clientWidth / 2;
+    let panY = -centerY + scrollWrapper.clientHeight / 2;
     let isDragging = false;
-    let startX = 0;
-    let startY = 0;
     let lastX = 0;
     let lastY = 0;
     let velocityX = 0;
@@ -665,18 +677,23 @@ Food for thought
                      ('ontouchstart' in window) || 
                      (navigator.maxTouchPoints > 0);
 
-    // Touch/Mouse event handlers for smooth scrolling
+    // Apply transform to canvas wrapper
+    function updateTransform() {
+      wrapper.style.transform = `translate(${panX}px, ${panY}px)`;
+    }
+
+    // Enhanced touch/mouse handlers for smooth panning
     function handleStart(e) {
       // Don't interfere with input interactions
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || 
-          e.target.closest('.node-input')) {
+          e.target.closest('.node-input') || e.target.closest('.mindmap-node')) {
         return;
       }
 
       isDragging = true;
       const point = e.touches ? e.touches[0] : e;
-      startX = lastX = point.clientX;
-      startY = lastY = point.clientY;
+      lastX = point.clientX;
+      lastY = point.clientY;
       velocityX = velocityY = 0;
       lastTime = performance.now();
 
@@ -686,6 +703,7 @@ Food for thought
         animationId = null;
       }
 
+      scrollWrapper.style.cursor = 'grabbing';
       e.preventDefault();
     }
 
@@ -700,13 +718,15 @@ Food for thought
         const deltaX = point.clientX - lastX;
         const deltaY = point.clientY - lastY;
         
-        // Smooth, responsive movement with appropriate speed
-        const scrollSpeed = isMobile ? 1.2 : 1.0;
-        scrollWrapper.scrollLeft -= deltaX * scrollSpeed;
-        scrollWrapper.scrollTop -= deltaY * scrollSpeed;
+        // Fast, responsive movement
+        const speed = isMobile ? 1.0 : 1.0;
+        panX += deltaX * speed;
+        panY += deltaY * speed;
+        
+        updateTransform();
         
         // Calculate velocity for momentum
-        velocityX = (deltaX / deltaTime) * 1000; // Convert to pixels per second
+        velocityX = (deltaX / deltaTime) * 1000;
         velocityY = (deltaY / deltaTime) * 1000;
       }
 
@@ -720,22 +740,25 @@ Food for thought
     function handleEnd(e) {
       if (!isDragging) return;
       isDragging = false;
+      scrollWrapper.style.cursor = 'grab';
 
-      // Start momentum scrolling if there's sufficient velocity
-      const minVelocity = isMobile ? 100 : 50; // pixels per second
+      // Start momentum scrolling with higher velocity threshold for more responsive feel
+      const minVelocity = isMobile ? 50 : 30;
       if (Math.abs(velocityX) > minVelocity || Math.abs(velocityY) > minVelocity) {
-        startMomentumScroll();
+        startMomentumPan();
       }
     }
 
-    function startMomentumScroll() {
-      const friction = 0.92; // Smooth deceleration
-      const minVelocity = 10; // Stop threshold
+    function startMomentumPan() {
+      const friction = 0.94; // Smooth deceleration
+      const minVelocity = 10;
       
       function animate() {
-        // Apply velocity to scroll position
-        scrollWrapper.scrollLeft -= velocityX * 0.016; // 16ms frame time
-        scrollWrapper.scrollTop -= velocityY * 0.016;
+        // Apply velocity to pan position
+        panX += velocityX * 0.016;
+        panY += velocityY * 0.016;
+        
+        updateTransform();
         
         // Apply friction
         velocityX *= friction;
@@ -767,12 +790,38 @@ Food for thought
 
     // Center button functionality
     centerBtn.addEventListener('click', () => {
-      scrollWrapper.scrollTo({
-        top: centralNodePosition.y - scrollWrapper.clientHeight / 2,
-        left: centralNodePosition.x - scrollWrapper.clientWidth / 2,
-        behavior: 'smooth'
-      });
+      panX = -centralNodePosition.x + scrollWrapper.clientWidth / 2;
+      panY = -centralNodePosition.y + scrollWrapper.clientHeight / 2;
+      
+      // Smooth animation to center
+      const startPanX = parseFloat(wrapper.style.transform.match(/translateX?\(([^)]+)px/)?.[1] || panX);
+      const startPanY = parseFloat(wrapper.style.transform.match(/translateY?\(([^)]+)px/)?.[1] || panY);
+      
+      const duration = 800;
+      const startTime = performance.now();
+      
+      function animateToCenter(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function
+        const easeProgress = 1 - Math.pow(1 - progress, 3);
+        
+        const currentPanX = startPanX + (panX - startPanX) * easeProgress;
+        const currentPanY = startPanY + (panY - startPanY) * easeProgress;
+        
+        wrapper.style.transform = `translate(${currentPanX}px, ${currentPanY}px)`;
+        
+        if (progress < 1) {
+          requestAnimationFrame(animateToCenter);
+        }
+      }
+      
+      requestAnimationFrame(animateToCenter);
     });
+
+    // Initialize transform
+    updateTransform();
 
     function drawLine(x1, y1, x2, y2, level = 0) {
       const scheme = colorSchemes[level % colorSchemes.length];
@@ -1036,11 +1085,10 @@ Food for thought
         });
 
         setTimeout(() => {
-          scrollWrapper.scrollTo({
-            top: cy - scrollWrapper.clientHeight / 2,
-            left: cx - scrollWrapper.clientWidth / 2,
-            behavior: 'smooth'
-          });
+          // Center the view on the central node
+          panX = -cx + scrollWrapper.clientWidth / 2;
+          panY = -cy + scrollWrapper.clientHeight / 2;
+          updateTransform();
           loading.style.display = 'none';
         }, 1000);
       }, 600);
@@ -1049,6 +1097,14 @@ Food for thought
     document.getElementById('generateBtn').addEventListener('click', generateMindMap);
     document.getElementById('mainQuestion').addEventListener('keypress', (e) => {
       if (e.key === 'Enter') generateMindMap();
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      // Recenter on resize
+      panX = -centralNodePosition.x + scrollWrapper.clientWidth / 2;
+      panY = -centralNodePosition.y + scrollWrapper.clientHeight / 2;
+      updateTransform();
     });
 
     window.addEventListener('load', () => {
