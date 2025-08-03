@@ -618,8 +618,6 @@ Food for thought
   <script>
     const canvas = document.getElementById('mindmap');
     const ctx = canvas.getContext('2d');
-
-    
     const wrapper = document.getElementById('canvasWrapper');
     const scrollWrapper = document.getElementById('scrollWrapper');
     const loading = document.getElementById('loading');
@@ -632,7 +630,7 @@ Food for thought
     let currentLevel = 0;
     let centralNodePosition = { x: centerX, y: centerY };
 
-    // Enhanced color schemes for dark theme with better contrast and glow effects
+    // Enhanced color schemes for dark theme
     const colorSchemes = [
       { line: '#6366f1', glow: 'rgba(99, 102, 241, 0.5)' },
       { line: '#22c55e', glow: 'rgba(34, 197, 94, 0.5)' },
@@ -651,123 +649,116 @@ Food for thought
       { line: '#a855f7', glow: 'rgba(168, 85, 247, 0.5)' }
     ];
 
-    // Touch and mouse event handling with increased momentum for mobile
+    // Smooth scrolling variables
     let isDragging = false;
-    let lastTouchX = 0;
-    let lastTouchY = 0;
+    let startX = 0;
+    let startY = 0;
+    let lastX = 0;
+    let lastY = 0;
     let velocityX = 0;
     let velocityY = 0;
     let lastTime = 0;
-    let momentumAnimation = null;
-    let isInputFocused = false;
+    let animationId = null;
 
-    // Detect if user is on mobile
+    // Detect mobile
     const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
                      ('ontouchstart' in window) || 
                      (navigator.maxTouchPoints > 0);
 
+    // Touch/Mouse event handlers for smooth scrolling
     function handleStart(e) {
-      // Don't drag if user is interacting with an input
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') {
+      // Don't interfere with input interactions
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || 
+          e.target.closest('.node-input')) {
         return;
       }
 
       isDragging = true;
-      const touch = e.touches ? e.touches[0] : e;
-      lastTouchX = touch.clientX;
-      lastTouchY = touch.clientY;
-      lastTime = Date.now();
-      velocityX = 0;
-      velocityY = 0;
-      
-      // Cancel any ongoing momentum
-      if (momentumAnimation) {
-        cancelAnimationFrame(momentumAnimation);
-        momentumAnimation = null;
+      const point = e.touches ? e.touches[0] : e;
+      startX = lastX = point.clientX;
+      startY = lastY = point.clientY;
+      velocityX = velocityY = 0;
+      lastTime = performance.now();
+
+      // Stop any ongoing momentum
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
       }
 
-      // Prevent default only on canvas area, not on inputs
-      if (!e.target.closest('.node-input')) {
-        e.preventDefault();
-      }
+      e.preventDefault();
     }
 
     function handleMove(e) {
-  if (!isDragging) return;
-  const touch = e.touches ? e.touches[0] : e;
-  const deltaX = touch.clientX - lastTouchX;
-  const deltaY = touch.clientY - lastTouchY;
+      if (!isDragging) return;
 
-  const speedMultiplier = isMobile ? 3.0 : 1; // Increase this if you want it faster
-  scrollX -= deltaX * speedMultiplier;
-  scrollY -= deltaY * speedMultiplier;
+      const point = e.touches ? e.touches[0] : e;
+      const currentTime = performance.now();
+      const deltaTime = currentTime - lastTime;
+      
+      if (deltaTime > 0) {
+        const deltaX = point.clientX - lastX;
+        const deltaY = point.clientY - lastY;
+        
+        // Smooth, responsive movement with appropriate speed
+        const scrollSpeed = isMobile ? 1.2 : 1.0;
+        scrollWrapper.scrollLeft -= deltaX * scrollSpeed;
+        scrollWrapper.scrollTop -= deltaY * scrollSpeed;
+        
+        // Calculate velocity for momentum
+        velocityX = (deltaX / deltaTime) * 1000; // Convert to pixels per second
+        velocityY = (deltaY / deltaTime) * 1000;
+      }
 
-  lastTouchX = touch.clientX;
-  lastTouchY = touch.clientY;
-
-  const now = Date.now();
-  const dt = now - lastTime;
-  velocityX = (deltaX / dt) * speedMultiplier;
-  velocityY = (deltaY / dt) * speedMultiplier;
-  lastTime = now;
-
-  drawMindmap();
-}
-
+      lastX = point.clientX;
+      lastY = point.clientY;
+      lastTime = currentTime;
+      
+      e.preventDefault();
+    }
 
     function handleEnd(e) {
       if (!isDragging) return;
       isDragging = false;
 
-      // Enhanced momentum scrolling for mobile with increased velocity
-      if (isMobile && (Math.abs(velocityX) > 0.8 || Math.abs(velocityY) > 0.8)) {
+      // Start momentum scrolling if there's sufficient velocity
+      const minVelocity = isMobile ? 100 : 50; // pixels per second
+      if (Math.abs(velocityX) > minVelocity || Math.abs(velocityY) > minVelocity) {
         startMomentumScroll();
       }
     }
 
     function startMomentumScroll() {
-     
-      const minVelocity = 0.05; // Lower threshold for smoother experience
+      const friction = 0.92; // Smooth deceleration
+      const minVelocity = 10; // Stop threshold
       
-      // Boost initial velocity for better mobile experience
-      velocityX *= 7;
-      velocityY *= 7;
-
       function animate() {
-        if (Math.abs(velocityX) < minVelocity && Math.abs(velocityY) < minVelocity) {
-          momentumAnimation = null;
-          return;
+        // Apply velocity to scroll position
+        scrollWrapper.scrollLeft -= velocityX * 0.016; // 16ms frame time
+        scrollWrapper.scrollTop -= velocityY * 0.016;
+        
+        // Apply friction
+        velocityX *= friction;
+        velocityY *= friction;
+        
+        // Continue if velocity is above threshold
+        if (Math.abs(velocityX) > minVelocity || Math.abs(velocityY) > minVelocity) {
+          animationId = requestAnimationFrame(animate);
+        } else {
+          animationId = null;
         }
-
-        scrollWrapper.scrollLeft -= velocityX;
-        scrollWrapper.scrollTop -= velocityY;
-        
-       const decay = isMobile ? 0.92 : 0.95;
-velocityX *= decay;
-velocityY *= decay;
-scrollX -= velocityX;
-scrollY -= velocityY;
-
-velocityX *= 0.9;
-velocityY *= 0.9;
-
-if (Math.abs(velocityX) < 0.1) velocityX = 0;
-if (Math.abs(velocityY) < 0.1) velocityY = 0;
-
-        
-        momentumAnimation = requestAnimationFrame(animate);
       }
       
-      momentumAnimation = requestAnimationFrame(animate);
+      animationId = requestAnimationFrame(animate);
     }
 
-    // Event listeners with improved mobile support
+    // Event listeners
     if (isMobile) {
       scrollWrapper.addEventListener('touchstart', handleStart, { passive: false });
       scrollWrapper.addEventListener('touchmove', handleMove, { passive: false });
       scrollWrapper.addEventListener('touchend', handleEnd, { passive: false });
+      scrollWrapper.addEventListener('touchcancel', handleEnd, { passive: false });
     } else {
-      // Desktop mouse events
       scrollWrapper.addEventListener('mousedown', handleStart);
       scrollWrapper.addEventListener('mousemove', handleMove);
       scrollWrapper.addEventListener('mouseup', handleEnd);
@@ -781,19 +772,6 @@ if (Math.abs(velocityY) < 0.1) velocityY = 0;
         left: centralNodePosition.x - scrollWrapper.clientWidth / 2,
         behavior: 'smooth'
       });
-    });
-
-    // Prevent dragging when focusing inputs
-    document.addEventListener('focusin', (e) => {
-      if (e.target.tagName === 'INPUT') {
-        isInputFocused = true;
-      }
-    });
-
-    document.addEventListener('focusout', (e) => {
-      if (e.target.tagName === 'INPUT') {
-        isInputFocused = false;
-      }
     });
 
     function drawLine(x1, y1, x2, y2, level = 0) {
